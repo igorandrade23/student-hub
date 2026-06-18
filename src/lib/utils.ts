@@ -46,6 +46,47 @@ export function diasAte(valor: string, de: Date = new Date()): number {
   return Math.round((alvoMeiaNoite.getTime() - hoje.getTime()) / 86_400_000);
 }
 
+/**
+ * Intervalo de datas curto. Um dia: "19 jun". Mesmo mês: "19–21 jun".
+ * Meses diferentes: "30 jun – 2 jul".
+ */
+export function formatarIntervaloCurto(inicio: string, fim?: string): string {
+  if (!fim || fim === inicio) return formatarDataCurta(inicio);
+  const di = new Date(`${inicio}T12:00:00`);
+  const df = new Date(`${fim}T12:00:00`);
+  if (di.getFullYear() === df.getFullYear() && di.getMonth() === df.getMonth()) {
+    return `${di.getDate()}–${formatarDataCurta(fim)}`;
+  }
+  return `${formatarDataCurta(inicio)} – ${formatarDataCurta(fim)}`;
+}
+
+/** Intervalo de datas por extenso. Um dia: "19 de jun.". Vários: "19 de jun. – 21 de jun.". */
+export function formatarIntervalo(inicio: string, fim?: string): string {
+  if (!fim || fim === inicio) return formatarData(inicio);
+  return `${formatarData(inicio)} – ${formatarData(fim)}`;
+}
+
+/** Nome do dia da semana em PT-BR, ex: "sexta-feira". */
+export function diaDaSemana(iso: string): string {
+  const d = new Date(`${iso}T12:00:00`);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("pt-BR", { weekday: "long" });
+}
+
+/** Versão curta sem "-feira", ex: "sexta". */
+export function diaDaSemanaCurto(iso: string): string {
+  return diaDaSemana(iso).replace(/-feira$/, "");
+}
+
+/**
+ * Rótulo de dia(s) de um evento: "sexta-feira" para um dia,
+ * "sexta a domingo" quando há intervalo (dataFim).
+ */
+export function rotuloDiasEvento(inicio: string, fim?: string): string {
+  if (fim && fim !== inicio) return `${diaDaSemanaCurto(inicio)} a ${diaDaSemanaCurto(fim)}`;
+  return diaDaSemana(inicio);
+}
+
 /** Converte um texto em slug: minúsculo, sem acento, espaços viram hífen. */
 export function slugify(texto: string): string {
   return (texto ?? "")

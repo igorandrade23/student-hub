@@ -28,7 +28,7 @@ export function ReviewView({
 
   return (
     <div>
-      <div className="mb-6 inline-flex gap-1 rounded-panel border border-line bg-white/80 p-1 shadow-sm">
+      <div className="mb-6 inline-flex gap-1 rounded-panel border border-line bg-surface p-1">
         <TabButton active={aba === "revisao"} onClick={() => setAba("revisao")} icon={BookOpen}>
           Revisão
         </TabButton>
@@ -56,8 +56,8 @@ function TabButton({
   return (
     <button
       onClick={onClick}
-      className={`inline-flex min-h-10 items-center gap-2 rounded-[6px] px-4 text-sm font-black transition ${
-        active ? "bg-ink text-white shadow" : "text-zinc-600 hover:bg-white"
+      className={`inline-flex min-h-10 items-center gap-2 rounded-[6px] px-4 text-sm font-semibold transition ${
+        active ? "bg-brand text-white" : "text-muted hover:bg-paper"
       }`}
     >
       <Icon className="h-4 w-4" />
