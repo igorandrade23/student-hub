@@ -28,7 +28,7 @@ export default async function RevisaoPage() {
                   {materia.disponivel ? (
                     <ArrowUpRight className="h-5 w-5 shrink-0 text-muted" />
                   ) : (
-                    <Badge className="text-muted">Em breve</Badge>
+                    <Badge className="text-muted">Sem revisão e quiz</Badge>
                   )}
                 </div>
                 <p className="mt-2 flex-1 leading-7 text-zinc-700">{materia.descricao}</p>

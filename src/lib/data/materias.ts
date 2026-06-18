@@ -95,7 +95,7 @@ export async function getReviewSubjects(): Promise<MateriaResumo[]> {
     map.set(slug, {
       slug,
       titulo: info?.titulo ?? name,
-      descricao: info?.descricao ?? (hasQuiz ? "Quiz de revisão disponível." : "Conteúdo de revisão ainda em preparação."),
+      descricao: info?.descricao ?? (hasQuiz ? "Quiz de revisão disponível." : "Sem revisão nem quiz cadastrados."),
       dataProva: ev.data,
       totalQuestoes: total,
       temConteudo: hasContent,
