@@ -1,11 +1,17 @@
-import { Badge } from "@/components/ui/Badge";
-import { Card } from "@/components/ui/Card";
+import { Card, type Dominio } from "@/components/ui/Card";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { getEventos, metaDoTipo, proximosEventos } from "@/lib/data/eventos";
+import { getEventos, metaDoTipo, proximosEventos, type TipoEvento } from "@/lib/data/eventos";
 import { calendarEmbedUrl } from "@/lib/data/turma";
-import { formatarData, textoRelativo } from "@/lib/utils";
+import { formatarData, rotuloDiasEvento, textoRelativo } from "@/lib/utils";
 
 export const metadata = { title: "Calendário | Hub da Turma" };
+
+const accentPorTipo: Record<TipoEvento, Dominio> = {
+  prova: "prova",
+  aula: "evento",
+  entrega: "estudo",
+  outro: "brand"
+};
 
 export default async function CalendarioPage() {
   const ordenados = proximosEventos(await getEventos());
@@ -29,9 +35,7 @@ export default async function CalendarioPage() {
         </Card>
 
         <section>
-          <h2 className="mb-3 text-sm font-black uppercase tracking-wide text-muted">
-            Datas importantes
-          </h2>
+          <h2 className="label-mono mb-3 text-muted">Datas importantes</h2>
           <div className="grid gap-3">
             {ordenados.length === 0 ? (
               <Card>
@@ -44,18 +48,26 @@ export default async function CalendarioPage() {
             {ordenados.map((evento) => {
               const meta = metaDoTipo(evento.tipo);
               return (
-                <Card key={evento.id} className="flex gap-3">
+                <Card key={evento.id} accent={accentPorTipo[evento.tipo]} className="flex gap-3">
                   <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${meta.bgClass}`} />
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <strong className="leading-tight">{evento.titulo}</strong>
-                      <Badge className={meta.colorClass}>{meta.label}</Badge>
+                      <strong className="font-display font-semibold leading-tight tracking-tight text-ink">
+                        {evento.titulo}
+                      </strong>
+                      <span className="label-mono text-muted">{meta.label}</span>
                     </div>
-                    <p className="mt-1 text-sm text-muted">
-                      {formatarData(evento.data)} · {textoRelativo(evento.data)}
+                    <p className="label-mono mt-1 text-brand-600">
+                      {rotuloDiasEvento(evento.data, evento.dataFim)}
+                    </p>
+                    <p className="mt-0.5 text-sm text-muted">
+                      {evento.dataFim
+                        ? `${formatarData(evento.data)} – ${formatarData(evento.dataFim)}`
+                        : formatarData(evento.data)}{" "}
+                      · {textoRelativo(evento.data)}
                     </p>
                     {evento.descricao ? (
-                      <p className="mt-2 text-sm leading-6 text-zinc-700">{evento.descricao}</p>
+                      <p className="mt-2 text-sm leading-6 text-muted">{evento.descricao}</p>
                     ) : null}
                   </div>
                 </Card>

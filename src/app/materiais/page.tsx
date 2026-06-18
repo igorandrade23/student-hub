@@ -19,14 +19,14 @@ export default function MateriaisPage() {
           href={driveFolderUrl(folderId)}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-11 items-center gap-2 rounded-panel border border-ink bg-ink px-4 font-black text-white shadow-lg shadow-zinc-900/15"
+          className="inline-flex min-h-11 items-center gap-2 rounded-panel bg-material px-4 font-semibold text-white transition hover:brightness-110"
         >
           <FolderOpen className="h-4 w-4" />
           Abrir no Drive
         </a>
       </PageHeader>
 
-      <Card className="p-0">
+      <Card accent="material" className="overflow-hidden p-0">
         <iframe
           title="Pasta de materiais no Google Drive"
           src={driveEmbedUrl(folderId)}

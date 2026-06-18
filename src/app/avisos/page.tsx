@@ -21,19 +21,22 @@ export default async function AvisosPage() {
         {ordenados.map((aviso) => (
           <Card
             key={aviso.id}
-            className={aviso.urgente ? "border-second/40 bg-second/5" : ""}
+            accent={aviso.urgente ? "prova" : "comunidade"}
+            className={aviso.urgente ? "bg-prova/[0.04]" : ""}
           >
             <div className="flex flex-wrap items-center gap-2">
               {aviso.urgente ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-second px-3 py-1 text-xs font-extrabold text-white">
+                <span className="inline-flex items-center gap-1 rounded-full bg-prova px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
                   <AlertTriangle className="h-3 w-3" />
                   Urgente
                 </span>
               ) : null}
-              <strong className="text-lg leading-tight">{aviso.titulo}</strong>
+              <strong className="font-display text-lg font-semibold leading-tight tracking-tight text-ink">
+                {aviso.titulo}
+              </strong>
             </div>
-            <p className="mt-2 leading-7 text-zinc-700">{aviso.texto}</p>
-            <p className="mt-3 text-sm text-muted">
+            <p className="mt-2 leading-7 text-muted">{aviso.texto}</p>
+            <p className="label-mono mt-3 text-muted">
               {formatarData(aviso.data)} · {textoRelativo(aviso.data)}
               {aviso.autor ? ` · ${aviso.autor}` : ""}
             </p>

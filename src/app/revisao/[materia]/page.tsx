@@ -58,7 +58,7 @@ export default async function ReviewSubjectPage({ params }: { params: Promise<{ 
         <ReviewView quiz={quiz}>{conteudo}</ReviewView>
       ) : (
         <Card className="flex flex-col items-center gap-3 py-12 text-center">
-          <div className="grid h-12 w-12 place-items-center rounded-full bg-[#fbfaf7] text-muted">
+          <div className="grid h-12 w-12 place-items-center rounded-full bg-paper text-muted">
             <Clock3 className="h-6 w-6" />
           </div>
           <strong className="text-lg">Sem revisão e quiz</strong>

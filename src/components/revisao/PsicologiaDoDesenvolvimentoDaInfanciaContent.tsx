@@ -1,12 +1,6 @@
 import { Layers3 } from "lucide-react";
 import { examFocus, phases, theories, type Phase } from "@/lib/study-data";
 
-const phaseGradient: Record<Phase["id"], string> = {
-  primeira: "from-first/20 via-white to-white",
-  segunda: "from-second/20 via-white to-white",
-  terceira: "from-third/20 via-white to-white"
-};
-
 /**
  * Conteúdo de revisão da matéria Psicologia do Desenvolvimento da Infância.
  * Apresentacional (sem estado): fases, comparativo, teorias e roteiro num fluxo único.
@@ -33,15 +27,13 @@ export function PsicologiaDoDesenvolvimentoDaInfanciaContent() {
 
 function PhaseBlock({ phase }: { phase: Phase }) {
   return (
-    <article
-      className={`overflow-hidden rounded-panel border border-line bg-gradient-to-br ${phaseGradient[phase.id]} shadow-panel`}
-    >
-      <div className={`h-1.5 ${phase.accentClass}`} />
+    <article className="overflow-hidden rounded-card border border-line bg-surfaceshadow-panel">
+      <div className={`h-1 ${phase.accentClass}`} />
       <div className="p-6">
-        <span className={`text-sm font-black ${phase.colorClass}`}>{phase.age}</span>
-        <h3 className="mt-1 text-xl font-black">{phase.label}</h3>
-        <p className="mt-2 max-w-4xl leading-7 text-zinc-700">{phase.thesis}</p>
-        <p className="mt-2 max-w-4xl text-sm leading-6 text-zinc-600">
+        <span className={`text-sm font-semibold ${phase.colorClass}`}>{phase.age}</span>
+        <h3 className="mt-1 font-display text-xl font-semibold tracking-tight">{phase.label}</h3>
+        <p className="mt-2 max-w-4xl leading-7 text-muted">{phase.thesis}</p>
+        <p className="mt-2 max-w-4xl text-sm leading-6 text-muted">
           <strong>Exemplo: </strong>
           {phase.example}
         </p>
@@ -58,12 +50,12 @@ function PhaseBlock({ phase }: { phase: Phase }) {
 
 function ConceptCard({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="rounded-panel border border-line bg-white/95 p-4">
+    <div className="rounded-panel border border-line bg-surface p-4">
       <h4 className="text-base font-black">{title}</h4>
-      <ul className="mt-2 space-y-1.5 text-sm text-zinc-700">
+      <ul className="mt-2 space-y-1.5 text-sm text-muted">
         {items.map((item) => (
           <li key={item} className="flex gap-2 leading-6">
-            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-ink" />
+            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
             <span>{item}</span>
           </li>
         ))}
@@ -84,7 +76,7 @@ function Comparison() {
   return (
     <section>
       <h2 className="mb-3 text-sm font-black uppercase tracking-wide text-muted">Comparativo entre fases</h2>
-      <div className="overflow-hidden rounded-panel border border-line bg-white shadow-panel">
+      <div className="overflow-hidden rounded-panel border border-line bg-surfaceshadow-panel">
         <div className="grid grid-cols-3 border-b border-line">
           {phases.map((phase) => (
             <div key={phase.id} className={`h-1.5 ${phase.accentClass}`} />
@@ -92,7 +84,7 @@ function Comparison() {
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] border-collapse text-left">
-            <thead className="bg-[#efede6]">
+            <thead className="bg-paper">
               <tr>
                 {["Aspecto", "Primeira", "Segunda", "Terceira"].map((head) => (
                   <th key={head} className="border-b border-line p-4 text-sm font-black">
@@ -108,7 +100,7 @@ function Comparison() {
                     <td
                       key={cell}
                       className={`border-b border-line p-4 align-top leading-6 ${
-                        i === 0 ? "font-bold text-ink" : "text-zinc-700"
+                        i === 0 ? "font-bold text-ink" : "text-muted"
                       }`}
                     >
                       {cell}
@@ -132,10 +124,10 @@ function Theories() {
         {theories.map(([name, text]) => (
           <article
             key={name}
-            className="rounded-panel border border-line bg-white/95 p-5 shadow-panel backdrop-blur"
+            className="rounded-panel border border-line bg-surface p-5 shadow-panel backdrop-blur"
           >
             <h3 className="text-lg font-black text-theory">{name}</h3>
-            <p className="mt-2 leading-7 text-zinc-700">{text}</p>
+            <p className="mt-2 leading-7 text-muted">{text}</p>
           </article>
         ))}
       </div>
@@ -145,7 +137,7 @@ function Theories() {
 
 function ExamPoints() {
   return (
-    <section className="rounded-panel border border-line bg-ink p-6 text-white shadow-panel">
+    <section className="rounded-panel border border-line bg-brand p-6 text-white shadow-panel">
       <div className="flex items-center gap-2 text-sm font-bold text-white/70">
         <Layers3 className="h-4 w-4" />
         Pontos que mais caem na prova
@@ -180,13 +172,13 @@ function StudyGuide() {
         {blocks.map(([name, text], index) => (
           <article
             key={name}
-            className="relative rounded-panel border border-line bg-white/95 p-5 shadow-panel backdrop-blur sm:ml-12"
+            className="relative rounded-panel border border-line bg-surface p-5 shadow-panel backdrop-blur sm:ml-12"
           >
-            <span className="absolute -left-[3.25rem] top-5 hidden h-9 w-9 place-items-center rounded-full border border-line bg-white text-sm font-black shadow-sm sm:grid">
+            <span className="absolute -left-[3.25rem] top-5 hidden h-9 w-9 place-items-center rounded-full border border-line bg-surfacetext-sm font-black shadow-sm sm:grid">
               {index + 1}
             </span>
             <h3 className="text-lg font-black">{name}</h3>
-            <p className="mt-2 leading-7 text-zinc-700">{text}</p>
+            <p className="mt-2 leading-7 text-muted">{text}</p>
           </article>
         ))}
       </div>

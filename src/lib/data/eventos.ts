@@ -9,7 +9,8 @@ export type TipoEvento = "prova" | "aula" | "entrega" | "outro";
 
 export type Evento = {
   id: string;
-  data: string; // ISO AAAA-MM-DD (no fuso America/Sao_Paulo)
+  data: string; // ISO AAAA-MM-DD (início, no fuso America/Sao_Paulo)
+  dataFim?: string; // ISO do último dia (inclusive), quando o evento dura vários dias
   titulo: string;
   tipo: TipoEvento;
   descricao?: string;
@@ -55,6 +56,13 @@ function dataIso(valorDtstart: string): string | null {
   return d.toLocaleDateString("en-CA", { timeZone: "America/Sao_Paulo" });
 }
 
+/** Subtrai um dia de uma data ISO (usa meio-dia para evitar virada de fuso). */
+function subtrairUmDia(iso: string): string {
+  const d = new Date(`${iso}T12:00:00`);
+  d.setDate(d.getDate() - 1);
+  return d.toLocaleDateString("en-CA");
+}
+
 /** Remove o "line folding" do ICS (continuações começam com espaço/tab). */
 function desdobrarLinhas(texto: string): string[] {
   const linhas = texto.split(/\r?\n/);
@@ -83,7 +91,9 @@ function desescapar(valor: string): string {
 function parseIcs(texto: string): Evento[] {
   const linhas = desdobrarLinhas(texto);
   const eventos: Evento[] = [];
-  let atual: Partial<Record<"dtstart" | "summary" | "description" | "uid", string>> | null = null;
+  let atual: Partial<
+    Record<"dtstart" | "dtend" | "summary" | "description" | "uid", string>
+  > | null = null;
 
   for (const linha of linhas) {
     if (linha === "BEGIN:VEVENT") {
@@ -95,9 +105,22 @@ function parseIcs(texto: string): Evento[] {
         const data = dataIso(atual.dtstart);
         if (data) {
           const titulo = atual.summary ? desescapar(atual.summary) : "(sem título)";
+
+          // Intervalo: para eventos de dia inteiro, DTEND é exclusivo (dia seguinte).
+          let dataFim: string | undefined;
+          if (atual.dtend) {
+            const fimIso = dataIso(atual.dtend);
+            if (fimIso) {
+              const diaInteiro = /^\d{8}$/.test(atual.dtend.trim());
+              const fimInclusivo = diaInteiro ? subtrairUmDia(fimIso) : fimIso;
+              if (fimInclusivo > data) dataFim = fimInclusivo;
+            }
+          }
+
           eventos.push({
             id: atual.uid ?? `${data}-${titulo}`,
             data,
+            dataFim,
             titulo,
             tipo: inferirTipo(titulo),
             descricao: atual.description ? desescapar(atual.description) : undefined
@@ -116,6 +139,7 @@ function parseIcs(texto: string): Evento[] {
     const valor = linha.slice(sep + 1);
 
     if (chave === "DTSTART") atual.dtstart = valor;
+    else if (chave === "DTEND") atual.dtend = valor;
     else if (chave === "SUMMARY") atual.summary = valor;
     else if (chave === "DESCRIPTION") atual.description = valor;
     else if (chave === "UID") atual.uid = valor;
@@ -139,7 +163,7 @@ export function metaDoTipo(tipo: TipoEvento) {
 export function proximosEventos(lista: Evento[], limite?: number, de: Date = new Date()): Evento[] {
   const hoje = new Date(de.getFullYear(), de.getMonth(), de.getDate());
   const futuros = lista
-    .filter((e) => new Date(`${e.data}T00:00:00`) >= hoje)
+    .filter((e) => new Date(`${e.dataFim ?? e.data}T00:00:00`) >= hoje)
     .sort((a, b) => a.data.localeCompare(b.data));
   return typeof limite === "number" ? futuros.slice(0, limite) : futuros;
 }
