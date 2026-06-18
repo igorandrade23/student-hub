@@ -61,9 +61,9 @@ export default async function ReviewSubjectPage({ params }: { params: Promise<{ 
           <div className="grid h-12 w-12 place-items-center rounded-full bg-[#fbfaf7] text-muted">
             <Clock3 className="h-6 w-6" />
           </div>
-          <strong className="text-lg">Conteúdo em breve</strong>
+          <strong className="text-lg">Sem revisão e quiz</strong>
           <p className="max-w-md leading-7 text-muted">
-            A revisão e o quiz desta matéria ainda estão sendo preparados. Volte mais perto da prova.
+            Esta matéria ainda não tem revisão nem quiz cadastrados.
           </p>
         </Card>
       )}
